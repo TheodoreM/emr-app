@@ -1,17 +1,25 @@
 import React from 'react';
 import Header from './Header';
-import Navbar from './Navbar';
+import Navbar from 'Navbar';
+import LoginForm from 'SignUp'
 
 const Home = () => {
-    return (
-        <div>
-            <Header />
-            <Navbar />
-            <main>
-                {/* The main content of your home page */}
-            </main>
-        </div>
-    );
+
+  const userInfoHandler = (enteredUserInfo) => {
+    const userInfo = {
+      ...enteredUserInfo,
+    }
+  }
+
+  return (
+    <div>
+      <Header />
+      <Navbar />
+      <main>
+        <LoginForm onSaveUserInfo={userInfoHandler} />
+      </main>
+    </div>
+  );
 };
 
 export default Home;

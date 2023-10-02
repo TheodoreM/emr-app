@@ -3,13 +3,12 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 
-const RegistrationForm = () => {
+const RegistrationForm = (props) => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPass, setConfPass] = useState('');
 
-    const history = useHistory(); // Access the history object
-
+    const history = useHistory();
     const nameRegex = /^[0-9A-Za-z]{6,16}$/;
     const passwordRegex = /^(?=.*?[0-9])(?=.*?[A-Za-z]).{8,32}$/;
 
@@ -31,6 +30,12 @@ const RegistrationForm = () => {
             return;
         }
 
+        const userData = {
+            username: name,
+            password: password
+        }
+
+        props.onSaveUserInfo(userData);
         try {
 
             const response = await axios.post('/api/register', { name, password });
