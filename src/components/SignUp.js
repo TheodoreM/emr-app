@@ -7,6 +7,7 @@ const RegistrationForm = (props) => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPass, setConfPass] = useState('');
+    const [error, setError] = useState('')
 
     const history = useHistory();
     const nameRegex = /^[0-9A-Za-z]{6,16}$/;
@@ -16,17 +17,17 @@ const RegistrationForm = (props) => {
         e.preventDefault();
 
         if (!name.match(nameRegex)) {
-            console.error('Name should be 6-16 characters and alphanumeric.');
+            setError('Name should be 6-16 characters and alphanumeric.');
             return;
         }
 
         if (!password.match(passwordRegex)) {
-            console.error('Password should be 8-32 characters with at least one number and one letter.');
+            setError('Password should be 8-32 characters with at least one number and one letter.');
             return;
         }
 
         if (password !== confirmPass) {
-            console.error('Passwords do not match');
+            setError('Passwords do not match');
             return;
         }
 
@@ -41,19 +42,21 @@ const RegistrationForm = (props) => {
             const response = await axios.post('/api/register', { name, password });
 
             if (response.status === 200) {
-                // Registration successful, redirect to the login page
-                history.push('/login'); // Use history.push to navigate
+                history.push('/LoginForm'); // history.push to navigate
             } else {
                 console.error('Registration failed');
             }
         } catch (error) {
             console.error('An error occurred:', error);
-            // Handle network or other errors
+            setError('An error occurred while registering.')
+
+
         }
 
         setName('');
         setPassword('');
         setConfPass('');
+        setError('');
     };
 
     const handleChange = (identifier, value) => {

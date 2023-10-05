@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Navbar from 'Navbar';
 import LoginForm from 'SignUp'
 
 const Home = () => {
+  const [userName, setUserName] = useState('');
 
   const userInfoHandler = (enteredUserInfo) => {
-    const userInfo = {
-      ...enteredUserInfo,
-    }
+    setUserName(enteredUserInfo.name)
   }
 
   return (
@@ -18,6 +17,7 @@ const Home = () => {
       <main>
         <LoginForm onSaveUserInfo={userInfoHandler} />
       </main>
+      <p>Welcome {userName} to the HealthHub!</p>
     </div>
   );
 };

@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import LoginForm from './SignUp';
 import Home from './Home';
-import Navbar from './components/NavBar';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Patients from './Patients';
+import Appointments from './Appointments';
+import Navbar from './Navbar'; // Import the Navbar component
 
 function App() {
-
-  const [user, setUser] = useState(null);
-
-  const handleLogin = 
-
   return (
     <Router>
-      <Navbar />
-      <Switch>
-        <Route path="/login"
-         <LoginForm onLogin={handleLogin} />
-        <Route path="/home" component={Home} />
-      </Switch>
-
+      <div>
+        <Navbar />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/patients" component={Patients} />
+          <Route path="/appointments" component={Appointments} />
+          {/* Define more routes for other components */}
+        </Switch>
+      </div>
     </Router>
   );
 }

@@ -2,53 +2,54 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'; // Import useHistory from React Router
 import axios from 'axios';
 
-function LoginForm() {
+function LoginForm(props) {
     const [formInput, setFormInput] = useState({
         name: '',
-        password: ''
+        password: '',
+        error: ''
     });
 
-    const history = useHistory(); // Access the history object
+    const history = useHistory();
     const nameRegex = /^[0-9A-Za-z]{6,16}$/;
     const passwordRegex = /^(?=.*?[0-9])(?=.*?[A-Za-z]).{8,32}$/;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
-
         if (!formInput.name.match(nameRegex)) {
-            console.error('Name should be 6-16 characters and alphanumeric.');
+            setFormInput({
+                ...formInput,
+                error: 'Name should be 6-16 characters and alphanumeric.'
+            });
             return;
         }
 
         if (!formInput.password.match(passwordRegex)) {
-            console.error('Password should be 8-32 characters with at least one number and one letter.');
+            setFormInput({
+                ...formInput,
+                error: 'Password should be 8-32 characters with at least one number and one letter.'
+            });
             return;
         }
 
         try {
-            const response = await axios.post('/api/login', { email, password });
+            const response = await axios.post('/api/register', { name: formInput.name, password: formInput.password });
 
             if (response.status === 200) {
-                // Login successful, redirect to the home page or another protected route
-                history.push('/home'); // Use history.push to navigate
+                props.onSaveUserInfo({ name: formInput.name });
+                history.push('/Home');
             } else {
-                // Login failed, handle errors
+                setFormInput({
+                    ...formInput,
+                    error: 'An error occurred during login. Please try again later.'
+                });
+                console.error('Login error:', error);
             }
         } catch (error) {
             console.error('An error occurred:', error);
-            // Handle network or other errors
+
         }
     };
-
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [name]: value,
-    //     });
-    // };
 
     const nameChangeHandler = (event) => {
         setFormInput(
@@ -75,6 +76,8 @@ function LoginForm() {
     return (
         <div>
             <h2>Login Form</h2>
+            {formInput.error && <p style={{ color: 'red' }}>{formInput.error}</p>}
+
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="usrname">Username:</label>
@@ -82,7 +85,7 @@ function LoginForm() {
                         type="text"
                         id="usrname"
                         name="username"
-                        value={formData.email}
+                        value={formInput.email}
                         onChange={nameChangeHandler}
                         required
                     />
@@ -93,7 +96,7 @@ function LoginForm() {
                         type="password"
                         id="password"
                         name="password"
-                        value={formData.password}
+                        value={formInput.password}
                         onChange={passwordChangeHandler}
                         required
                     />
